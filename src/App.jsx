@@ -4,8 +4,16 @@ const App = () => {
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas', number: '123-456-7890' }
   ])
+
+  const [filter, setFilter] = useState('')
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+
+  const filteredPersons = persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
+
+  function handleFilterChange (event) {
+    setFilter(event.target.value)
+  }
 
   function addPerson (event) {
     event.preventDefault()
@@ -30,22 +38,54 @@ const App = () => {
   }
 
   return (
-    <div className='m-6 p-4 bg-white rounded-lg shadow-md shadow-black'>
-      <h1 className='text-2xl font-semibold mb-4'>Phonebook</h1>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input value={newName} onChange={handlePersonChange}/>
+    <div className='m-6 p-6 bg-gray-100 rounded-lg shadow-lg'>
+      <h1 className='text-3xl font-bold mb-6 text-center'>Phonebook</h1>
+      <div className='mb-4'>
+        <label className='block text-lg font-medium mb-2'>Filter by name</label>
+        <input 
+          value={filter} 
+          onChange={handleFilterChange} 
+          className='w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+          placeholder='Search by name'
+        />
+      </div>
+      <form onSubmit={addPerson} className='mb-6'>
+        <div className='mb-4 flex'>
+          <div className='w-1/2 pr-2'>
+            <label className='block text-lg font-medium mb-2'>Name</label>
+            <input 
+              value={newName} 
+              onChange={handlePersonChange} 
+              className='w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+              placeholder='Enter name'
+            />
+          </div>
+          <div className='w-1/2 pl-2'>
+            <label className='block text-lg font-medium mb-2'>Number</label>
+            <input 
+              value={newNumber} 
+              onChange={handleNumberChange} 
+              className='w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+              placeholder='Enter number'
+            />
+          </div>
         </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNumberChange}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
+        <div className='text-center'>
+          <button 
+            type="submit" 
+            className='px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500'
+          >
+            Add
+          </button>
         </div>
       </form>
-      <h2>Numbers</h2>
-      <ul>
-        {persons.map((person, index) => <li key={index}>{person.name} {person.number}</li>)}
+      <h2 className='text-2xl font-semibold mb-4'>Numbers</h2>
+      <ul className='list-disc pl-5'>
+        {filteredPersons.map((person, index) => (
+          <li key={index} className='mb-2'>
+            <span className='font-medium'>{person.name}</span>: {person.number}
+          </li>
+        ))}
       </ul>
     </div>
   )
